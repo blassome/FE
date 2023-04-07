@@ -1,6 +1,5 @@
 import { useState } from "react";
 import styled from "styled-components";
-import KakaoLogin from "./KakaoLogin";
 
 const KakaoLoginButtonWrapper = styled.div`
   display: flex;
