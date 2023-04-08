@@ -1,8 +1,11 @@
+//KaKaLogin.tsx
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import qs from "qs";
 import styled from "styled-components";
+import { useRecoilState } from "recoil";
+import { nickAtom } from "../recoil/Atom";
 
 const Wrapper = styled.div`
   display: flex;
@@ -12,20 +15,12 @@ const Wrapper = styled.div`
   height: 100vh;
 `;
 
-const UserName = styled.span`
-  font-weight: bold;
-  font-size: 24px;
-  color: #000080;
-
-  @media (max-width: 480px) {
-    font-size: 16px;
-  }
-`;
-
 function KakaoLogin() {
   const location = useLocation();
   const [token, setToken] = useState("");
   const [userName, setUserName] = useState("");
+  const [nickName, setNickName] = useRecoilState(nickAtom);
+  const navigate = useNavigate();
 
   const getToken = async () => {
     const CLIENT_ID = process.env.REACT_APP_JS_KEY;
@@ -48,9 +43,8 @@ function KakaoLogin() {
         payload
       );
       setToken(res.data.access_token);
-      console.log(res.data.access_token);
     } catch (error) {
-      console.log("에러남");
+      console.log("토큰에러 " + error);
     }
   };
 
@@ -72,18 +66,30 @@ function KakaoLogin() {
             }
           );
           setUserName(kakaoUser.data.properties.nickname);
+          //닉네임 상태 업데이트
+          setNickName(kakaoUser.data.properties.nickname);
+          navigate("/setnickname")  
+          // await axios.post('/api/', { //backend통신
+          //   userName : userName,
+          //   userEmail : kakaoUser.data.properties.email
+          // })
+          // .then((response) => {
+          //     console.log("전송 성공" + response.data)
+          // })
+          // .catch((error) => {
+          //     console.log(error);
+          // });
         } catch (error) {
-          console.log("에러남");
+          console.log("사용자 정보 에러: " + error);
         }
       }
     };
     getKakaoUser();
-  }, [token]);
+  });
 
   return (
-    // 사용자 정보 출력
     <Wrapper>
-      {userName && <UserName>안녕하세요 {userName}님!</UserName>}
+      <h1>로딩</h1>
     </Wrapper>
   );
 }

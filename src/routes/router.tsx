@@ -3,6 +3,8 @@ import App from "../App";
 import StartLogin from "../login/StartLogin";
 import ErrorScreen from "../error/ErrorScreen";
 import KakaoLogin from "../login/KakaoLogin";
+import SetNickname from "../screens/SetNickname";
+import MyTree from "../screens/Mytree";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +19,16 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <StartLogin />,
+        errorElement: <ErrorScreen />,
+      },
+      {
+        path: "/setnickname",
+        element: <SetNickname />,
+        errorElement: <ErrorScreen />,
+      },
+      {
+        path: "/mytree",
+        element: <MyTree/>,
         errorElement: <ErrorScreen />,
       },
     ],
